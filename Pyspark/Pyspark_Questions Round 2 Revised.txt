@@ -1,0 +1,388 @@
+1) Spark architecture
+The Spark follows the master-slave architecture. Its cluster consists of a single master and multiple slaves.
+The Spark architecture depends upon two abstractions:
+	Resilient Distributed Dataset (RDD)
+	Directed Acyclic Graph (DAG)
+We also have few components in the spark Architecture those are:
+	Driver node
+	worker node
+	Executor
+	Cluster manager
+	Task
+Resilient Distributed Datasets (RDD)
+------------------------------
+The Resilient Distributed Datasets are the group of data items that can be stored in-memory on worker nodes. Here,
+	Resilient: Restore the data on failure.
+	Distributed: Data is distributed among different nodes.
+	Dataset: Group of data.
+	We will learn about RDD later in detail.
+
+Directed Acyclic Graph (DAG)
+----------------------------
+Directed Acyclic Graph is a finite direct graph that performs a sequence of computations on data. Each node is an RDD partition, and the edge is a transformation on top of data. Here, the graph refers the navigation whereas directed and acyclic refers to how it is done.
+
+Driver Node
+-----------
+The Driver Program is a process that runs the main() function of the application and creates the SparkContext object. The purpose of SparkContext is to coordinate the spark applications, running as independent sets of processes on a cluster.
+
+To run on a cluster, the SparkContext connects to a different type of cluster managers and then perform the following tasks: -
+
+It acquires executors on nodes in the cluster.
+Then, it sends your application code to the executors. Here, the application code can be defined by JAR or Python files passed to the SparkContext.
+At last, the SparkContext sends tasks to the executors to run.
+
+Cluster Manager
+---------------
+The role of the cluster manager is to allocate resources across applications. The Spark is capable enough of running on a large number of clusters.
+It consists of various types of cluster managers such as Hadoop YARN, Apache Mesos and Standalone Scheduler.
+Here, the Standalone Scheduler is a standalone spark cluster manager that facilitates to install Spark on an empty set of machines.
+
+Worker Node
+-----------
+The worker node is a slave node
+Its role is to run the application code in the cluster.
+
+Executor
+--------
+An executor is a process launched for an application on a worker node.
+It runs tasks and keeps data in memory or disk storage across them.
+It read and write data to the external sources.
+Every application contains its executor.
+
+Task
+----
+A unit of work that will be sent to one executor.
+
+
+
+
+2) role of DAG?
+
+DAGScheduler is the scheduling layer of Apache Spark that implements stage-oriented scheduling using Jobs and Stages.
+
+DAGScheduler transforms a logical execution plan (RDD lineage of dependencies built using RDD transformations) to a physical execution plan (using stages).
+
+After an action has been called on an RDD, SparkContext hands over a logical plan to DAGScheduler that it in turn translates to a set of stages that are submitted as TaskSets for execution.
+
+DAGScheduler does three things in Spark:
+-----------------------------------------
+>Computes an execution DAG (DAG of stages) for a job
+>Determines the preferred locations to run each task on
+>Handles failures due to shuffle output files being lost
+
+
+3) partitioning and bucketing
+Bucketing is similar to partitioning, but partitioning creates a directory for each partition, whereas bucketing distributes data across a fixed number of buckets by a hash on the bucket value. Tables can be bucketed on more than one value and bucketing can be used with or without partitioning
+
+
+4) dynamic partitioning vs static partitioning
+in static partitioning we need to specify the partition column value in each and every LOAD statement. dynamic partition allow us not to specify partition column value each time.
+
+Data Loading in static partitioning is faster as compare to dynamic partitioning so static partitioning is preferred when we have massive files to load. In static partitioning individual files are loaded as per the partition we want to set.
+
+5) lazy evaluation?
+Lazy evaluation means that Spark does not evaluate each transformation as they arrive, but instead queues them together and evaluate all at once, as an Action is called. The benefit of this approach is that Spark can make optimization decisions after it had a chance to look at the DAG in entirety
+
+6) Wide transformations and narrow transformations
+Narrow transformations
+----------------------
+Narrow transformations transform data without any shuffle involved. These transformations transform the data on a per-partition basis; that is to say, each element of the output RDD can be computed without involving any elements from different partitions.
+ex: map(), filter()
+
+wide transformation
+------------------
+In wide transformation, all the elements that are required to compute the records in the single partition may live in many partitions of parent RDD
+
+7) on what basis you will decide the column on which partitioning or bucketing can be applied? Explain with a small example+
+Spark/PySpark partitioning is a way to split the data into multiple partitions so that you can execute transformations on multiple partitions in parallel which allows completing the job faster. You can also write partitioned data into a file system (multiple sub-directories) for faster reads by downstream systems.
+
+Spark/PySpark supports partitioning in memory (RDD/DataFrame) and partitioning on the disk (File system).
+Partition in memory: You can partition or repartition the DataFrame by calling repartition() or coalesce() transformations.
+
+
+Example :
+Let’s assume we have data of software employees in India with state wise
+So, we can do partition or bucketing in state wise and region wise.
+
+
+8) use case for cache or persist
+
+Both caching and persisting are used to save the Spark RDD, Dataframe, and Dataset's. But, the difference is, RDD cache() method default saves it to memory (MEMORY_ONLY) whereas persist() method is used to store it to the user-defined storage level
+
+9) storage levels of persist
+Spark has various persistence levels to store the RDDs on disk or in memory or as a combination of both with different replication levels namely:
+
+MEMORY_ONLY
+MEMORY_ONLY_SER
+MEMORY_AND_DISK
+MEMORY_AND_DISK_SER, DISK_ONLY
+OFF_HEAP
+
+
+10) serialisation
+Serialization is used for performance tuning on Apache Spark. All data that is sent over the network or written to the disk or persisted in the memory should be serialized. Serialization plays an important role in costly operations. PySpark supports custom serializers for performance tuning.
+
+Serialization plays an important role in the performance of any distributed application. Formats that are slow to serialize objects into, or consume a large number of bytes, will greatly slow down the computation
+
+11) optimization techniques of Hive?
+However,  to run queries on petabytes of data we all know that hive is a query language which is similar to SQL built on Hadoop ecosystem. So, there are several Hive optimization techniques to improve its performance which we can implement when we run our hive queries
+	Tez-Execution Engine in Hive
+	Usage of Suitable File Format in Hive
+	Hive Partitioning
+	Bucketing in Hive
+	Vectorization In Hive
+	Cost-Based Optimization in Hive (CBO)
+	Hive Indexing 
+
+https://data-flair.training/blogs/hive-optimization-techniques/
+follow the link for more details.
+
+
+12) optimization techniques of spark?
+
+	Data filtering as early as possible
+	File format selection
+	API Selection
+	Use of advance variables
+	Parallelism using Coalesce/Repartition
+	Data Serialization
+	Caching and Parsistance
+
+13) Advantages of Spark over Map Reduce?
+Spark is a Hadoop enhancement to MapReduce. The primary difference between Spark and MapReduce is that Spark processes and retains data in memory for subsequent steps, whereas MapReduce processes data on disk. As a result, for smaller workloads, Spark's data processing speeds are up to 100x faster than MapReduce
+
+14) client mode vs cluster mode.
+In cluster mode, the Spark driver runs inside an application master process which is managed by YARN on the cluster, and the client can go away after initiating the application. In client mode, the driver runs in the client process, and the application master is only used for requesting resources from YARN.
+
+
+15) parameters mentioned in spark-submit command
+The spark-submit command is a utility to run or submit a Spark or PySpark application program (or job) to the cluster by specifying options and configurations, the application you are submitting can be written in Scala, Java, or Python (PySpark). 
+we can use Spark-submit command along with .py file 
+For ex:
+spark-submit test.py
+
+
+
+
+16) deploy mode?
+Deploy mode specifies the location of where driver executes in the deployment environment. Deploy mode can be one of the following options: client (default) - the driver runs on the machine that the Spark application was launched. cluster - the driver runs on a random node in a cluster.
+
+17) dynamic resource allocation
+Dynamic Resource Allocation. Spark provides a mechanism to dynamically adjust the resources your application occupies based on the workload. This means that your application may give resources back to the cluster if they are no longer used and request them again later when there is demand
+
+
+18) static resource allocation
+Static Allocation – The values are given as part of spark-submit. Dynamic Allocation – The values are picked up based on the requirement (size of data, amount of computations needed) and released after use. This helps the resources to be re-used for other applications
+
+19) which file formats you are using in your project
+CSV, Parquet, Json.
+If we get data in other formats then we will change it into Csv and we do the transformations on it.
+
+20) avro, orc, parquet file formats
+Avro format is a row-based storage format for Hadoop, which is widely used as a serialization platform. Avro format stores the schema in JSON format, making it easy to read and interpret by any program. The data itself is stored in a binary format making it compact and efficient in Avro files
+
+Apache ORC (Optimized Row Columnar) is a free and open-source column-oriented data storage format. It is similar to the other columnar-storage file formats available in the Hadoop ecosystem such as RCFile and Parquet
+
+Apache Parquet is an open source, column-oriented data file format designed for efficient data storage and retrieval. It provides efficient data compression and encoding schemes with enhanced performance to handle complex data in bulk.
+
+
+21) what is data skewness
+Skewness is the statistical term, which refers to the value distribution in a given dataset. When we say that there is highly skewed data, it means that some column values have more rows and some very few, i.e., the data is not properly/evenly distributed
+
+22) use case of data skewness
+Usually, in Apache Spark, data skewness is caused by transformations that change data partitioning like join, groupBy, and orderBy. For example, joining on a key that is not evenly distributed across the cluster, causing some partitions to be very large and not allowing Spark to process data in parallel.
+
+
+23) salting technique?
+In Spark, SALT is a technique that adds random values to push Spark partition data evenly. It's usually good to adopt for wide transformation requires shuffling like join operation. The following image visualizes how SALT is going to change the key distribution.
+
+
+24) repartition and coalesce?
+Spark repartition () is used to increase or decrease the RDD, DataFrame, Dataset partitions whereas the Spark coalesce () is used to only decrease the number of partitions in an efficient way.
+coalesce may run faster than repartition, but unequal sized partitions are generally slower to work with than equal sized partitions. One additional point to note here is that, as the basic principle of Spark RDD is immutability. The repartition or coalesce will create new RDD.
+
+
+25) how to load data from a file to dataframe
+Using the read_csv() function from the pandas package, you can import tabular data from CSV files into pandas dataframe by specifying a parameter value for the file name (e.g. pd.read_csv("filename.csv")). Remember that you gave pandas an alias (pd), so you will use pd to call pandas functions
+
+
+26) spark context & spark session
+sparkContext was used as a channel to access all spark functionality.
+
+The spark driver program uses spark context to connect to the cluster through a resource manager (YARN or Mesos). sparkConf is required to create the spark context object, which stores configuration parameter like appName (to identify your spark driver), application, number of core and memory size of executor running on worker node.
+
+SparkSession provides a single point of entry to interact with underlying Spark functionality and allows programming Spark with Dataframe and Dataset APIs. All the functionality available with sparkContext are also available in sparkSession. Once the SparkSession is instantiated, we can configure Spark’s run-time config properties
+
+
+27) sortby vs order by
+sort() is more efficient compared to orderBy() because the data is sorted on each partition individually and this is why the order in the output data is not guaranteed. On the other hand, orderBy() collects all the data into a single executor and then sorts them
+
+28) joins ... Explain with example
+join in Spark SQL is the functionality to join two or more datasets that are similar to the table join in SQL based databases. Spark works as the tabular form of datasets and data frames. The Spark SQL supports several types of joins such as inner join, cross join, left outer join, right outer join, full outer join, left semi-join, left anti join
+
+Default is inner join.
+
+	1. INNER JOIN
+The INNER JOIN returns the dataset which has the rows that have matching values in both the datasets i.e. value of the common field will be the same.
+	2. CROSS JOIN
+The CROSS JOIN returns the dataset which is the number of rows in the first dataset multiplied by the number of rows in the second dataset. Such kind of result is called the Cartesian Product.
+Prerequisite: For using a cross join, spark.sql.crossJoin.enabled must be set to true. Otherwise, the exception will be thrown.
+	3. LEFT OUTER JOIN
+The LEFT OUTER JOIN returns the dataset that has all rows from the left dataset, and the matched rows from the right dataset.
+	4. RIGHT OUTER JOIN
+The RIGHT OUTER JOIN returns the dataset that has all rows from the right dataset, and the matched rows from the left dataset.
+	5. FULL OUTER JOIN
+The FULL OUTER JOIN returns the dataset that has all rows when there is a match in either the left or right dataset.
+	6. LEFT SEMI JOIN
+The LEFT SEMI JOIN returns the dataset which has all rows from the left dataset having their correspondence in the right dataset. Unlike the LEFT OUTER JOIN, the returned dataset in LEFT SEMI JOIN contains only the columns from the left dataset.
+
+For more join types refer any website.
+
+29) window functions
+
+spark window function operate on a group of row and return the single value for every input
+spark support 3 kinds of windows funtions:
+	ranking functions
+	analytic functions
+	aggregate functions
+
+ranking functions:
+=================
+RANK() will assign non-consecutive “ranks” to the values
+ranking functions are of 3 types: 
+    row_number window function
+    rank window function 
+    dense_rank window function 
+
+	row_number Window Function: row_number() window function is used to give the sequential row number starting from 1 to the result of each window partition.
+
+	rank Window Function: rank() window function is used to provide a rank to the result within a window partition. This function leaves gaps in rank when there are ties.
+
+
+	dense_rank Window Function:dense_rank() window function is used to get the result with rank of rows within a window partition without any gaps. This is similar to rank() function difference being rank function leaves gaps in rank when there are ties.
+
+analytic functions:
+==================
+analytic functions are of 2 types:
+    lag window function 
+    lead window function
+
+ lag Window Function: This is the same as the LAG function in SQL.
+lead Window Function: This is the same as the LEAD function in SQL.
+
+Aggregate Functions:
+-------------------
+using this function calculate sum, min, max for each department using Spark SQL Aggregate window functions and WindowSpec. 
+When working with Aggregate functions, we don’t need to use order by clause.
+
+
+30) row number, rank, dense rank
+RANK() will assign non-consecutive “ranks” to the values
+ranking functions are of 3 types: 
+    row_number window function
+    rank window function 
+    dense_rank window function 
+
+	row_number Window Function: row_number() window function is used to give the sequential row number starting from 1 to the result of each window partition.
+
+	rank Window Function: rank() window function is used to provide a rank to the result within a window partition. This function leaves gaps in rank when there are ties.
+
+
+	dense_rank Window Function:dense_rank() window function is used to get the result with rank of rows within a window partition without any gaps. This is similar to rank() function difference being rank function leaves gaps in rank when there are ties.
+
+31) applying windowing/partition by on aggregate functions
+Aggregate functions can be used as window functions; that is, you can use the OVER clause with aggregate functions.
+This query computes, for each partition, the aggregate over the rows in that partition. 
+
+
+32) when to use inner join and outer join
+ If you only want the rows from A that have a match in B, that’s an INNER join.
+ If you want all the rows from A whether or not they match B, that’s a LEFT OUTER join.
+
+
+33) difference between truncate, drop and delete
+TRUNCATE which only deletes the data of the tables, the DROP command deletes the data of the table as well as removes the entire schema/structure of the table from the database.
+
+
+34) how to copy file from local to hdfs
+In order to copy a file from the local file system to HDFS, use Hadoop fs -put or hdfs dfs -put, on put command, specify the local-file-path where you wanted to copy from and then HDFS-file-path where you wanted to copy to. If the file already exists on HDFS, you will get an error message saying “File already exists”.
+
+35) RDD vs Dataframe vs Datasets
+•	Spark RDD APIs – An RDD stands for Resilient Distributed Datasets. It is Read-only partition collection of records. RDD is the fundamental data structure of Spark. It allows a programmer to perform in-memory computations on large clusters in a fault-tolerant manner. 
+
+•	Spark Dataframe APIs – Unlike an RDD, data organized into named columns. For example a table in a relational database. It is an immutable distributed collection of data. DataFrame in Spark allows developers to impose a structure onto a distributed collection of data, allowing higher-level abstraction.
+
+ 
+•	Spark Dataset APIs – Datasets in Apache Spark are an extension of DataFrame API which provides type-safe, object-oriented programming interface. 
+
+
+36) scenario... How to delete the duplicate records in a table.... By apply rownumber function on table.. we can delete records with rownumber greater than 1. Thus maintaining unique records
+
+The row_number() function returns the sequential row number starting from the 1 to the result of each window partition. The rank() function in PySpark returns the rank to the development within the window partition. So, this function leaves gaps in the class when there are ties.
+Example :
+from pyspark.sql.window import *
+from pyspark.sql.functions import row_number
+df.withColumn("row_num", row_number().over(Window.partitionBy("Group").orderBy("Date")))
+now the row number is unique value and we can delete record where count greater than 1 but it wont maintain unique records once if it delete
+
+
+
+
+37) scala program to print word count in scala or fibonicci or palindrome
+	create several lines of words.
+scala> val lines = List("Hello world", "This is a hello world example for word count")
+lines: List[String] = List(Hello world, This is a hello world example for word count)
+
+	2) use flatMap to convert to words lists
+scala> val words = lines.flatMap(_.split(" "))
+words: List[String] = List(Hello, world, This, is, a, hello, world, example, for, word, count)
+
+	3) group words to map
+scala> words.groupBy((word:String) => word)
+res9: scala.collection.immutable.Map[String,List[String]] = Map(for -> List(for), count -> List(count), is -> List(is), This -> List(This), world -> List(world, world), a -> List(a), Hello -> List(Hello), hello -> List(hello), example -> List(example), word -> List(word))
+The structure of each map is Map[String,List[String]].
+
+	4) count length of each words list
+scala> words.groupBy((word:String) => word).mapValues(_.length)
+res12: scala.collection.immutable.Map[String,Int] = Map(for -> 1, count -> 1, i
+
+
+38) types of tables in hive
+There are two types of tables in Hive:
+•	Managed Table (Internal)
+•	External Table
+Managed (Internal) Table
+----------------------
+In the Managed table, Apache Hive is responsible for the table data and metadata, and any action on tables data will affect physical files of data.
+ 
+External Table (Un-Managed Tables)
+--------------------------
+In the External table, Apache Hive is responsible ONLY for the table metadata, and any action on the table will affect only table metadata, for example, if you deleted a tables partition actually partition metadata will be deleted from Hive warehouse only, but actual data will still be available on its current location. You can write data to external tables, but actions such as drop, delete, and so on will affect only table metadata, not the actual data.
+
+
+39) limitations of temporary tables
+	Temporary tables created with CREATE TEMPORARY TABLE have the following limitations:
+	TEMPORARY tables are supported only by the InnoDB, MEMORY, MyISAM, and MERGE storage engines.
+	Temporary tables are not supported for NDB Cluster.
+	The SHOW TABLES statement does not list TEMPORARY tables.
+	
+To rename TEMPORARY tables, RENAME TABLE does not work. Use ALTER TABLE instead:
+ALTER TABLE old_name RENAME new_name;
+
+You cannot refer to a TEMPORARY table more than once in the same query. For example, the following does not work:
+SELECT * FROM temp_table JOIN temp_table AS t2;
+The statement produces this error:
+ERROR 1137: Can't reopen table: 'temp_table'
+
+You can work around this issue if your query permits use of a common table expression (CTE) rather than a TEMPORARY table. For example, this fails with the Can't reopen table error:
+CREATE TEMPORARY TABLE t SELECT 1 AS col_a, 2 AS col_b;
+SELECT * FROM t AS t1 JOIN t AS t2;
+To avoid the error, use a WITH clause that defines a CTE, rather than the TEMPORARY table:
+WITH cte AS (SELECT 1 AS col_a, 2 AS col_b)
+SELECT * FROM cte AS t1 JOIN cte AS t2;
+	>The Can't reopen table error also occurs if you refer to a temporary table multiple times in a stored function under different aliases, even if the references occur in different statements within the function. It may occur for temporary tables created outside stored functions and referred to across multiple calling and callee functions.
+	>If a TEMPORARY is created with the same name as an existing non-TEMPORARY table, the non-TEMPORARY table is hidden until the TEMPORARY table is dropped, even if the tables use different storage engines.
+	>There are known issues in using temporary tables with replication. See Section 17.5.1.31, “Replication and Temporary Tables”, for more information.
+
+40)  sample code to load a CSV file to dataframe
+df = spark.read.csv("path1,path2,path3")
