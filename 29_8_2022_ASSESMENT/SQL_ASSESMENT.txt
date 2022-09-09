@@ -1,0 +1,13 @@
+This small scenario for assessment if you see we have user data and post data and comment data, the scenario is Facebook post and comment , where any user can post any data as well as any user can comment the posted data.
+
+Write a SQL query for below use case:
+
+	How much post has been done from each user.
+	Which user had the maximum number post.
+	What is the avg post rate?
+	Which post had the maximum comment.
+	Which post had the minimum comment.
+	Which user had zero posts?
+	Which post had zero comment.
+	Which user hasn't commented for any post?
+	Try to get your own dimension for this data set.
