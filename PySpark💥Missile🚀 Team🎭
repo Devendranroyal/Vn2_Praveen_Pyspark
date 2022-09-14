@@ -1,0 +1,32 @@
+Todays Spark task : 
+3. Spark Cluster Managers 
+4. Introduction to DataBricks
+
+SQL Task:
+# Try to do in dbeaver(Snowflake)
+Day 3: primary key, foreign key, unique , not null
+
+
+We will connect everyday at 6pm to discuss all today tasks & topics
+
+
+Revision1(13.09.2022): 
+Spark Task:
+1. Course Introduction: What is Spark?
+Apache Spark is a fast and general purpose engine for large scale data processing 
+framework
+
+2. Why Apache Spark?
+a. Speed 	      : Run programs up to 100x faster than Hadoop MapReduce in memory, or 10x faster on disk.
+b. easy to use        : Write applications quickly in Java, Scala, Python, R
+c. genarality         : Combine SQL, streaming, and complex analytics.
+d. runs on everywhere : Spark runs on Hadoop, Mesos, standalone, or in the cloud.
+
+SQL Task:
+# Try to do in Snowflake
+Day 2: Start & Create a table , insert , update , delete, alter and so on ...
+DDL Commands  - ALTER COMMENT CREATE DESCRIBE DROP SHOW USE 
+DML Commands  - INSERT MERGE UPDATE DELETE TRUNCATE
+DQL Commands  - SELECT
+TCL Commands  - START TRANSACTION COMMIT ROLLBACK
+DCL Commands  - GRANT REVOKE
