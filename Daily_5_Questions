@@ -1,8 +1,20 @@
 1-9-2021 questions:
 1.) ways to read a file in pysaprk and what are the file extension that pyspark support to read?
+There are three ways to read text files into PySpark DataFrame.
+--> Using spark.read.text()
+--> Using spark.read.csv()
+--> Using spark.read.format().load()
+
 2.) ways to write a file in pysaprk and what are the file extension that pyspark support to write?
+
 3.) difference between filter and where?
+--> Both 'filter' and 'where' in Spark SQL gives same result. There is no difference between the two.
+--> It's just filter is simply the standard Scala name for such a function, and where is for people who prefer SQL
+
 4.) how select is used in pyspark?
+--> In PySpark, select() function is used to select single, multiple, column by index, all columns from the list and the nested columns from a DataFrame, 
+--> PySpark select() is a transformation function hence it returns a new DataFrame with the selected columns.
+
 5.) what is different types of filter in pyspark?
 
 1.) repartition vs coalesce
@@ -54,8 +66,12 @@
 26.) spark driver architecture?
 27.) start schema vs snoflake schema
 28.) datalake vs datawarehouse
-29.) spark sql or pysaprk
-30.) delta lake in databriks is data lake or datawarehouse
+29.) spark sql or pyspark sql
+30.) delta lake in databricks is data lake or datawarehouse
+--> Delta Lake is a project initiated by Databricks, which is now opensource. 
+--> Delta lake is an open-source storage layer that helps you build a data lake comprised of one or more tables in Delta Lake format
+--> Delta Lake allows you to operate a multicloud lakehouse architecture that provides data warehousing performance at data lake economics for up to 6x better price/performance for SQL workloads than traditional cloud data warehouses.
+
 
 S&P Global - Ankit
 
@@ -70,7 +86,7 @@ Self introduction
 		We will 
 6. Caching techniques in spark and y we use caching techniques?
 7. when we have Squit data(key value format) and specific key is in multiple keys then how will you process the data and we can't delete the duplicate data? (salting techniques)
-8. Optimization techniques
+8. Optimization techniques spark/Hive 
 9. How did you connect to the table using Pyspark.
 10. Suppose sale table, with few employee columns emp_name, designation, dept, sales. Now i want top3 emp od every dept who did most sale
 		df.groupby('dept')
