@@ -1,0 +1,84 @@
+1-9-2021 questions:
+1.) ways to read a file in pysaprk and what are the file extension that pyspark support to read?
+2.) ways to write a file in pysaprk and what are the file extension that pyspark support to write?
+3.) difference between filter and where?
+4.) how select is used in pyspark?
+5.) what is different types of filter in pyspark?
+
+1.) repartition vs coalesce
+2.) hadoop architecture
+3.) spark architecture
+4.) partition vs bucketing
+5.) data skewness 
+6.) data shuffling
+
+1.) ways to read a file in pysaprk and what are the file extension that pyspark support to read?
+2.) ways to write a file in pysaprk and what are the file extension that pyspark support to write?
+3.) difference between filter and where?
+4.) how select is used in pyspark?
+5.) what is different types of filter in pyspark?
+6.) what is Caching and Persistence of DataFrame?
+
+1.) what is rdd?
+2.) what is dataframe?
+3.) what is fault tolerance?
+4.) what is bigdata?
+5.) create a udf to reverse a string in pyspark.
+6.) create a udf to get len of string.
+
+1.) about yourself?
+2.) etl vs elt, which one is better?
+3.) datalake vs datawarehouse
+4.) fact vs dimention
+5.) what is fact?
+6.) what is dimention?
+7.) how to write etl pipeline?
+8.) what is the consideration for etl pipeline
+9.) what is kind error you have handled?
+10.) what is spark context?
+11.) what is satges in saprk?
+12.) olap vs oltp
+13.) list vs tuple
+14.) joins in sql?
+15.) acid property?
+16.) have you worked in snowflake?
+17.) have you handled transaction with comparision of another table?
+18.) where is destination?
+19.) primary key vs forigien key vs composite key
+20.) does forign key have duplcate value
+21.) oops in python
+22.) inheritance , polymerphism
+23.) batch vs streming
+24.) rdd, why rdd is lazy evaluation and what is resilent in rdd?
+25.) what is transformation and action?
+26.) spark driver architecture?
+27.) start schema vs snoflake schema
+28.) datalake vs datawarehouse
+29.) spark sql or pysaprk
+30.) delta lake in databriks is data lake or datawarehouse
+
+S&P Global - Ankit
+
+Self introduction
+
+1. spark Architecture
+2. what is Spark Driver
+3. Whom will decide the division of data in the spark driver and worker node
+4. how will you filter the records from the particular data frame, like df name is city, He wants the records 
+	 We use isin() method for that, here we can left join for better perfomance.
+5. If you have 2df and large in size, and you can not join them in your system, then what will be your approach towared that.
+		We will 
+6. Caching techniques in spark and y we use caching techniques?
+7. when we have Squit data(key value format) and specific key is in multiple keys then how will you process the data and we can't delete the duplicate data? (salting techniques)
+8. Optimization techniques
+9. How did you connect to the table using Pyspark.
+10. Suppose sale table, with few employee columns emp_name, designation, dept, sales. Now i want top3 emp od every dept who did most sale
+		df.groupby('dept')
+11. Debugging
+12. Class method in python
+13. Lambda functions.
+14. repartion and colease
+15. class and static method
+16. data skewness
+
+https://www.geeksforgeeks.org/filtering-a-pyspark-dataframe-using-isin-by-exclusion/
