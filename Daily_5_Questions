@@ -82,3 +82,12 @@ Self introduction
 16. data skewness
 
 https://www.geeksforgeeks.org/filtering-a-pyspark-dataframe-using-isin-by-exclusion/
+
+#Ramu internal evaluation
+About Your Project
+What is difficulties you faced in your project
+Repartition vs Colesec, which one is better and why
+Parquet vs Avro, Which is better and why
+RDD vs Dateframes, Which is better and why
+Typetest in Spark Scala
+Optimized Technics in Spark
