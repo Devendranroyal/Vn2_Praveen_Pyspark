@@ -169,3 +169,10 @@ https://www.geeksforgeeks.org/filtering-a-pyspark-dataframe-using-isin-by-exclus
 6.) RDD vs Dateframes, Which is better and why
 7.) Typetest in Spark Scala
 8.) Optimized Technics in Spark
+--> Data Serialization
+--> Data filtering as early as possible
+--> Api selection
+--> File format selection
+--> Parallelism using repartition/coalesce
+--> caching/persistance
+--> Use of advance variables.
