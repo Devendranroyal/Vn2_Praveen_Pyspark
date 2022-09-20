@@ -1,4 +1,5 @@
-1-9-2021 questions:
+# 1-9-2021 questions:
+
 1.) ways to read a file in pysaprk and what are the file extension that pyspark support to read?
 There are three ways to read text files into PySpark DataFrame.
 --> Using spark.read.text()
@@ -77,8 +78,69 @@ There are three ways to read text files into PySpark DataFrame.
 
 Self introduction
 
-1. spark Architecture
-2. what is Spark Driver
+1. Spark Architecture
+The Spark follows the master-slave architecture. Its cluster consists of a single master and multiple slaves.
+The Spark architecture depends upon two abstractions:
+	Resilient Distributed Dataset (RDD)
+	Directed Acyclic Graph (DAG)
+We also have few components in the spark Architecture those are:
+	Driver node
+	worker node
+	Executor
+	Cluster manager
+	Task
+Resilient Distributed Datasets (RDD)
+------------------------------
+The Resilient Distributed Datasets are the group of data items that can be stored in-memory on worker nodes. Here,
+	Resilient: Restore the data on failure.
+	Distributed: Data is distributed among different nodes.
+	Dataset: Group of data.
+	We will learn about RDD later in detail.
+
+Directed Acyclic Graph (DAG)
+----------------------------
+Directed Acyclic Graph is a finite direct graph that performs a sequence of computations on data. Each node is an RDD partition, and the edge is a transformation on top of data. Here, the graph refers the navigation whereas directed and acyclic refers to how it is done.
+
+Driver Node
+-----------
+The Driver Program is a process that runs the main() function of the application and creates the SparkContext object. The purpose of SparkContext is to coordinate the spark applications, running as independent sets of processes on a cluster.
+
+To run on a cluster, the SparkContext connects to a different type of cluster managers and then perform the following tasks: -
+
+It acquires executors on nodes in the cluster.
+Then, it sends your application code to the executors. Here, the application code can be defined by JAR or Python files passed to the SparkContext.
+At last, the SparkContext sends tasks to the executors to run.
+
+Cluster Manager
+---------------
+The role of the cluster manager is to allocate resources across applications. The Spark is capable enough of running on a large number of clusters.
+It consists of various types of cluster managers such as Hadoop YARN, Apache Mesos and Standalone Scheduler.
+Here, the Standalone Scheduler is a standalone spark cluster manager that facilitates to install Spark on an empty set of machines.
+
+Worker Node
+-----------
+The worker node is a slave node
+Its role is to run the application code in the cluster.
+
+Executor 
+--------
+An executor is a process launched for an application on a worker node.
+It runs tasks and keeps data in memory or disk storage across them.
+It read and write data to the external sources.
+Every application contains its executor.
+
+Task
+----
+A unit of work that will be sent to one executor.
+
+2. What is Spark Driver
+A Spark driver (aka an application’s driver process) is a JVM process that hosts SparkContext for a Spark application. It is the master node in a Spark application.
+It is the cockpit of jobs and tasks execution (using DAGScheduler and Task Scheduler).
+It hosts Web UI for the environment.
+It splits a Spark application into tasks and schedules them to run on executors.
+A driver is where the task scheduler lives and spawns tasks across workers.
+A driver coordinates workers and overall execution of tasks.
+
 3. Whom will decide the division of data in the spark driver and worker node
 4. how will you filter the records from the particular data frame, like df name is city, He wants the records 
 	 We use isin() method for that, here we can left join for better perfomance.
@@ -89,7 +151,7 @@ Self introduction
 8. Optimization techniques spark/Hive 
 9. How did you connect to the table using Pyspark.
 10. Suppose sale table, with few employee columns emp_name, designation, dept, sales. Now i want top3 emp od every dept who did most sale
-		df.groupby('dept')
+    df.groupby('dept')
 11. Debugging
 12. Class method in python
 13. Lambda functions.
