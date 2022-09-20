@@ -73,7 +73,7 @@ There are three ways to read text files into PySpark DataFrame.
 --> Delta Lake allows you to operate a multicloud lakehouse architecture that provides data warehousing performance at data lake economics for up to 6x better price/performance for SQL workloads than traditional cloud data warehouses.
 
 
-S&P Global - Ankit
+# S&P Global - Ankit
 
 Self introduction
 
@@ -100,10 +100,10 @@ Self introduction
 https://www.geeksforgeeks.org/filtering-a-pyspark-dataframe-using-isin-by-exclusion/
 
 #Ramu internal evaluation
-About Your Project
-What is difficulties you faced in your project
-Repartition vs Colesec, which one is better and why
-Parquet vs Avro, Which is better and why
-RDD vs Dateframes, Which is better and why
-Typetest in Spark Scala
-Optimized Technics in Spark
+1.) About Your Project
+2.) What is difficulties you faced in your project
+3.) Repartition vs Colesec, which one is better and why
+4.) Parquet vs Avro, Which is better and why
+6.) RDD vs Dateframes, Which is better and why
+7.) Typetest in Spark Scala
+8.) Optimized Technics in Spark
