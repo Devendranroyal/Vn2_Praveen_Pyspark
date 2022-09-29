@@ -1,0 +1,149 @@
+-- Bucketing Properties
+
+set hive.enforce.bucketing = true;  
+
+
+--Create table with Bucketing
+
+CREATE TABLE bckt_movies
+(mov_id BIGINT , mov_name STRING ,prod_studio STRING, col_world DOUBLE , col_us_canada DOUBLE , col_uk DOUBLE , col_aus DOUBLE)
+PARTITIONED BY (rel_year STRING)
+CLUSTERED BY(mov_id) INTO 6 BUCKETS;
+
+CREATE TABLE bc_movies
+(mov_id BIGINT , mov_name STRING ,prod_studio STRING, col_world DOUBLE , col_us_canada DOUBLE , col_uk DOUBLE , col_aus DOUBLE)
+CLUSTERED BY(mov_id) INTO 6 BUCKETS;
+
+--Populate Bucketed Table
+--Year=2009
+FROM movies 
+insert overwrite table bckt_movies PARTITION (rel_year)
+select mov_id, mov_name, prod_studio,  col_world, col_us_canada, col_uk, col_aus, rel_year WHERE rel_year='2009';
+
+--Year=2010
+FROM movies 
+insert overwrite table bckt_movies PARTITION (rel_year)
+select mov_id, mov_name, prod_studio,  col_world, col_us_canada, col_uk, col_aus, rel_year WHERE rel_year='2010';
+
+--Year=2007-2012
+FROM movies 
+insert overwrite table bckt_movies PARTITION (rel_year)
+select mov_id, mov_name, prod_studio,  col_world, col_us_canada, col_uk, col_aus, rel_year;
+
+
+
+
+Partioning and Bucketing:
+
+CREATE TABLE part_movies(mov_id BIGINT , mov_name STRING ,prod_studio STRING, col_world DOUBLE ,col_us_canada DOUBLE , col_uk DOUBLE , col_aus DOUBLE)PARTITIONED BY (rel_year STRING)ROW FORMAT DELIMITED FIELDS TERMINATED BY  ','  ;
+
+
+SET hive.exec.dynamic.partition=true;
+SET hive.exec.dynamic.partition.mode=nonstrict;
+
+
+
+
+
+Sampling
+
+select count(*) from bckt_movies
+tablesample(bucket 1 out of 6 on mov_id);
+o/p: 9
+select count(*) from bckt_movies
+tablesample(bucket 3 out of 6 on mov_id);
+o/p: 10
+select * from bckt_movies
+tablesample(bucket 4 out of 6 on mov_id);
+o/p: 9
+
+select count(*) from bckt_movies
+tablesample(bucket 1 out of 6 on mov_id) where rel_year='2009';
+
+select distinct prod_studio from bckt_movies
+tablesample(bucket 3 out of 6 on mov_id) order by prod_studio;
+
+select count(*) from bckt_movies
+tablesample(50 percent);
+
+
+
+
+hive -f
+--------
+
+CREATE TABLE  director
+(mov_id BIGINT , director_name STRING)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY  ',';
+
+[cloudera@localhost]hive -f script1.hql
+
+LOAD DATA INPATH '/home/cloudera/Desktop/Hive_New/director.txt' OVERWRITE INTO TABLE shan.director;
+
+
+[cloudera@localhost]hive -e 'select * from databse.director'
+
+[cloudera@localhost]hive -e 'SELECT km.*, kd.*
+FROM kumar.movies km JOIN kumar.director kd ON
+(km.mov_id = kd.mov_id)'
+
+JOINS
+-----
+SELECT movies.*, director.*
+FROM movies JOIN director ON
+(movies.mov_id = director.mov_id);
+
+SELECT movies.*, director.*
+FROM movies LEFT OUTER JOIN director ON
+(movies.mov_id = director.mov_id);
+	
+	
+SELECT movies.*, director.*
+FROM movies RIGHT OUTER JOIN director ON
+(movies.mov_id = director.mov_id);
+		
+SELECT a.*
+FROM movies a LEFT SEMI JOIN director b ON
+(a.mov_id = b.mov_id);
+
+SELECT a.*
+FROM movies a LEFT SEMI JOIN director b ON
+(a.mov_id = b.mov_id);
+
+create table store_complex_type (emp_id int, name string, local_address STRUCT<street:string, city:string,country:string,zipcode:bigint>, country_address MAP<STRING,STRING>, job_history array<STRING>)
+row format delimited fields terminated by ','
+collection items terminated by ':'
+map keys terminated by '_';
+
+complex_type.txt
+-----------------
+100,Shan,4th:CHN:IND:600101,CHENNAI_INDIA,SI:CSC
+101,Jai,1th:THA:IND:600096,THANJAVUR_INDIA,HCL:TM
+102,Karthik,5th:AP:IND:600089,RENIKUNDA_INDIA,CTS:HCL
+
+
+load data local inpath '/home/cloudera/Desktop/Hive_New/complex_type.txt' overwrite into table store_complex_type;
+
+select emp_id, name, local_address.city, local_address.zipcode, country_address['CHENNAI'], job_history[0] from store_complex_type where emp_id='100'; 
+EXPLAIN SELECT count(mov_id) FROM movies;
+
+EXPLAIN SELECT a.*
+FROM movies a LEFT SEMI JOIN director b ON
+(a.mov_id = b.mov_id);
+
+
+EXPLAIN CREATE TABLE bckt_movies
+(mov_id BIGINT , mov_name STRING ,prod_studio STRING, col_world DOUBLE , col_us_canada DOUBLE , col_uk DOUBLE , col_aus DOUBLE)
+PARTITIONED BY (rel_year STRING)
+CLUSTERED BY(mov_id) INTO 6 BUCKETS;
+
+
+EXPLAIN create table store_complex_type (emp_id int, name string, local_address STRUCT<street:string, city:string,country:string,zipcode:bigint>, country_address MAP<STRING,STRING>, job_history array<STRING>)
+row format delimited fields terminated by ','
+collection items terminated by ':'
+map keys terminated by '_';
+
+EXPLAIN EXTENDED SELECT count(mov_id) FROM movies;
+
+
+

@@ -1,0 +1,18 @@
+1)Loading the data into Spark DataFrames(Apply the all format  delimeter)
+
+2)Querying CSV data using temporary tables
+
+a)find out in each timezones how many airports are operating?
+
+b)average Altitude (in feet) of airports in each Country?
+
+c)can do aggregations in sql queries on Spark We will find out how many unique cities have airports in each country
+
+d)find out how many airports are there in South east part in our dataset
+
+e)calculate average latitude and longitude for these airports in each country
+
+3)create external table with partition column in state?
+
+4)find the which coutry geting highest score?
+

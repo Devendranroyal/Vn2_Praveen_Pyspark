@@ -1,0 +1,10 @@
+35,19884,www.amazon.com,www.google.com,18.213.22.198i,US,09/12/2011
+36,19885,www.amazon1.com,www.google.com,18.213.22.198,US,09/12/2011
+37,19886,www.amazon2.com,www.google.com,18.213.22.198,US,09/14/2011
+38,19887,www.amazon3.com,www.google.com,18.213.22.198,US,09/15/2011
+39,19888,www.amazon4.com,www.google.com,18.213.22.198,US,09/15/2011
+40,19884,www.amazon.com,www.google.com,18.213.22.199,US,09/12/2011
+41,19885,www.amazon1.com,www.google.com,18.213.22.197,US,09/12/2011
+42,19886,www.amazon2.com,www.google.com,18.213.22.198,US,09/14/2011
+43,19887,www.amazon3.com,www.google.com,18.213.22.196,US,09/15/2011
+44,19888,www.amazon4.com,www.google.com,18.213.22.195,US,09/15/2011

@@ -1,0 +1,55 @@
+DIRECOTORY:
+pwd
+
+
+ls
+ll
+ls -lrth 
+ll *nohup*
+mkdir
+
+rm *
+rmr --- 
+
+
+create file:
+
+vi test.txt
+I-mode
+dinesh
+ESC-mode
+:wq!
+
+mv - move and rename file
+cp
+
+chmod 755 test_1.sh
+
+7-rwx
+5-rx
+0
+
+chown user::'group' test_1.sh
+
+
+
+File running and killing:
+nohup sh test.sh &
+
+kill -9 psid
+
+
+ls  | grep 'keytab'
+sed -i 's/dinesh/mohan/g' test.sh
+print first column 
+
+cat vitest.sh | grep "mohan" > m.txt
+cat vitest.sh | grep "mohan" >> m.txt
+
+
+
+
+
+
+
+

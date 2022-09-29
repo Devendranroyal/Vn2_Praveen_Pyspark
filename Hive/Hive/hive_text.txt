@@ -1,0 +1,315 @@
+show databases;
+use test;
+show tables;
+desc <tablename>
+-------------------------------------------------------------------------
+Demo session:
+
+load data local inpath '/home/HADOOP/cdh/hive/Hive_lab/input/sale_data.txt' overwrite into table store_day_sale_t;
+-----------------------------------------------------------------------------------
+
+File Formats:
+
+Like SQL, HiveQL handles structured data only. By default, Hive has derby database to store the data in it. We can configure Hive with MySQL database. 
+As mentioned HiveQL can handle only structured data. Data is eventually stored in files.
+
+TEXTFILE:
+
+org.apache.hadoop.mapred.TextInputFormat
+org.apache.hadoop.mapred.TextOutputFormat
+
+stored as textfile
+
+
+SEQUENCEFILE:
+
+Sequence files are flat files consisting of binary key-value pairs. When Hive converts queries to MapReduce jobs, 
+it decides on the appropriate key-value pairs to be used for a given record
+org.apache.hadoop.mapred.SequenceFileInputFormat
+org.apache.hadoop.hive.ql.io.HiveSequenceFileOutputFormat
+
+We know that Hadoop’s performance is drawn out when we work with a small number of files with big size rather than 
+a large number of files with small size. If the size of a file is smaller than the typical block size in Hadoop, we consider it as a small file. 
+Due to this, a number of metadata increases which will become an overhead to the NameNode.
+To solve this problem sequence files are introduced in Hadoop. Sequence files act as a container to store the small files.
+
+ORCFILE:
+
+ORC stands for Optimized Row Columnar which means it can store data in an optimized way than the other file formats.
+ ORC reduces the size of the original data up to 75%(eg: 100GB file will become 25GB). As a result the speed of data processing also increases. 
+ORC shows better performance than Text, Sequence and RC file formats.
+An ORC file contains rows data in groups called as Stripes along with a file footer. ORC format improves the performance when Hive is processing the data.
+
+org.apache.hadoop.hive.ql.io.orc
+
+stored as orcfile;
+
+
+
+
+-------------------------------------------------------------------------
+a. Create Database in Hive:
+	Create database <database name>;
+	create database test;
+	show databases;
+	use test;
+-------------------------------------------------------------------------
+b. Create managed table named as  store_day_sale_managed
+
+CREATE  TABLE store_day_sale(Store_id INT,Store_code STRING,Sale_Date STRING,Sale_Amount INT)
+ROW FORMAT DELIMITED 
+FIELDS TERMINATED BY ','
+LINES TERMINATED by '\n';
+
+show tables;
+desc store_day_sale;
+-------------------------------------------------------------------------
+c.Load Data in above table from a file
+	If file in Local File System
+		LOAD DATA local INPATH '/home/HADOOP/hive/inputs/sale_data.dat' OVERWRITE INTO TABLE store_day_sale;
+
+	If file in HDFS 
+		LOAD DATA INPATH '/user/HADOOP/hive/inputs/sale_data.dat' OVERWRITE INTO TABLE store_day_sale;
+
+hadoop fs -cat /user/hive/warehouse/test.db/store_day_sale/sale_data.dat
+
+-------------------------------------------------------------------------
+d.Create External table named as ext_accounts
+CREATE EXTERNAL TABLE store_day_sale_external(
+     Store_id INT,
+     Store_code STRING,
+     Sale_Date STRING,
+     Sale_Amount INT)
+ ROW FORMAT DELIMITED 
+ FIELDS TERMINATED BY ','
+ LINES TERMINATED by '\n'
+ LOCATION '/user/retailteg/hive/external';
+-------------------------------------------------------------------------
+load data inpath './hive/inputs/sale_data.dat' overwrite into  table store_day_sale_external;
+ select * from store_day_sale_external;
+
+-------------------------------------------------------------------------
+create managed table store_info_t
+
+CREATE TABLE store_info_t(
+     Store_id INT,
+     Store_city STRING,
+     Store_name STRING)
+ ROW FORMAT DELIMITED
+ FIELDS TERMINATED BY ','
+ LINES TERMINATED BY '\n';
+
+
+load data inpath './hive/inputs/store_detail.dat' overwrite into table store_info_t;
+select * from store_info_t;
+-------------------------------------------------------------------------
+importing data CTAS:
+input :
+105,AHD,2012-11-01,19856
+106,HYD,2012-11-01,32152
+
+CREATE TABLE store_day_sale_HYD 
+AS SELECT store_code, sale_Date,Sale_Amount 
+FROM store_day_sale
+ WHERE store_code = 'HYD';
+
+ select * from store_day_sale_hyd;
+
+------------------------------------------------------------------------
+Exporting Data:
+
+input:
+HYD     2012-11-01      32152
+HYD     2012-11-02      29865
+
+INSERT OVERWRITE LOCAL DIRECTORY '/home/HADOOP/hive/inputs/' 
+SELECT store_code, sale_Date,Sale_Amount 
+FROM store_day_sale 
+WHERE store_code = 'HYD';
+
+-------------------------------------------------------------------------
+
+Insert Command:
+
+INSERT OVERWRITE will overwrite any existing data in the table or partition
+and INSERT INTO will append to the table or partition keeping the existing
+
+CREATE EXTERNAL TABLE partition_test (a int) PARTITIONED BY (p string) LOCATION '/user/hdfs/test';
+INSERT OVERWRITE TABLE partition_test PARTITION (p = 'p1') SELECT <int_column> FROM <existing_table>;
+
+
+INSERT INTO TABLE partition_test PARTITION (p = 'p1') SELECT <int_column> FROM <existing_table>;
+
+Exporting data from employees table to multiple local directories based on specific condition
+
+FROM employees se INSERT OVERWRITE DIRECTORY '/tmp/or_employees' SELECT * WHERE se.cty = 'US' and se.st = 'OR'
+INSERT OVERWRITE DIRECTORY '/tmp/ca_employees' SELECT * WHERE se.cty = 'US' and se.st = 'CA'
+INSERT OVERWRITE DIRECTORY '/tmp/il_employees' SELECT * WHERE se.cty = 'US' and se.st = 'IL';
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Partition and Bucketing:
+
+CREATE TABLE table_tab1 (id INT, name STRING, dept STRING, yoj INT) PARTITIONED BY (year STRING);
+LOAD DATA LOCAL INPATH tab1’/clientdata/2009/file2’OVERWRITE INTO TABLE studentTab PARTITION (year='2009');
+LOAD DATA LOCAL INPATH tab1’/clientdata/2010/file3’OVERWRITE INTO TABLE studentTab PARTITION (year='2010');
+
+
+Types of Hive Partitioning:
+
+Static Partitioning:
+
+Insert input data files individually into a partition table is Static Partition.
+Usually when loading files (big files) into Hive tables static partitions are preferred.
+Static Partition saves your time in loading data compared to dynamic partition.
+You “statically” add a partition in the table and move the file into the partition of the table.
+
+If you want to use the Static partition in the hive you should set property set hive.mapred.mode = strict This property set by default in hive-site.xml
+Static partition is in Strict Mode.
+
+
+Dynamic Partitioning:
+
+Single insert to partition table is known as a dynamic partition.
+Usually, dynamic partition loads the data from the non-partitioned table.
+Dynamic Partition takes more time in loading data compared to static partition.
+
+When you have large data stored in a table then the Dynamic partition is suitable.
+If you want to partition a number of columns but you don’t know how many columns then also dynamic partition is suitable.
+
+Bucketing:
+
+CREATE TABLE bucketed_user(
+       firstname VARCHAR(64),
+        lastname  VARCHAR(64),
+        address   STRING,
+        city  VARCHAR(64),
+       state  VARCHAR(64),
+        post      STRING,
+        phone1    VARCHAR(64),
+        phone2    STRING,
+        email     STRING,
+        web       STRING
+        )
+       COMMENT 'A bucketed sorted user table'
+        PARTITIONED BY (country VARCHAR(64))
+       CLUSTERED BY (state) SORTED BY (city) INTO 32 BUCKETS
+        STORED AS SEQUENCEFILE;
+
+Example:
+
+set hive.exec.dynamic.partition=true;
+set hive.exec.dynamic.partition.mode=nonstrict;
+set hive.exec.max.dynamic.partitions.pernode=1000;
+set hive.enforce.bucketing = true;
+DROP TABLE IF EXISTS bucketed_user;
+CREATE TEMPORARY TABLE temp_user(
+      firstname VARCHAR(64),
+       lastname  VARCHAR(64),
+       address   STRING,
+       country   VARCHAR(64),
+       city      VARCHAR(64),
+       state     VARCHAR(64),
+       post      STRING,
+       phone1    VARCHAR(64),
+       phone2    STRING,
+       email     STRING,
+       web       STRING
+       )
+       ROW FORMAT DELIMITED
+       FIELDS TERMINATED BY ','
+       LINES TERMINATED BY '\n'
+      STORED AS TEXTFILE;
+LOAD DATA LOCAL INPATH '/home/user/user_table.txt' INTO TABLE temp_user;
+CREATE TABLE bucketed_user(
+       firstname VARCHAR(64),
+       lastname  VARCHAR(64),
+       address   STRING,
+       city     VARCHAR(64),
+      state   VARCHAR(64),
+       post      STRING,
+       phone1    VARCHAR(64),
+       phone2    STRING,
+       email     STRING,
+       web       STRING
+       )
+      COMMENT 'A bucketed sorted user table'
+       PARTITIONED BY (country VARCHAR(64))
+      CLUSTERED BY (state) SORTED BY (city) INTO 32 BUCKETS
+       STORED AS SEQUENCEFILE;
+
+--------------------------------------------------------------------------------------------
+
+
+-- left semi join
+
+
+select a.store_id,
+       a.store_code,
+       a.sale_date,
+       a.Sale_Amount
+  from store_day_sale a 
+  left semi join 
+       store_info_t b on
+a.store_id = b.store_id;
+-------------------------------------------------------------------------
+-- equi join
+
+select a.store_id,
+       a.store_code,
+       a.sale_date,
+       b.store_city,
+       b.store_name,
+       a.sale_Amount
+  from store_day_sale  a 
+       join 
+       store_info_t b on
+a.store_id = b.store_id 
+sort by a.sale_date,a.store_id;
+
+output:
+100     MAA     2012-11-01      MAA_CHENNAI     Chennai Store 1 21500
+101     BOM     2012-11-01      BOB_MUMBAI      Mumbai Store 1  17563
+102     KOL     2012-11-01      KOL_KOLKATA     Kolkata Store 1 32563
+103     NDL     2012-11-01      NDL_NEW DELHI   New Delhi Store 1       26589
+104     PNE     2012-11-01      PNE_PUNE        PUne Store 1    24523
+------------------------------------------------------------------------
+modes:
+
+interactive mode
+ hive -e 'select * from test.store_day_sale'
+
+non-interactive mode:
+hive -f script1.hql
+
+-local files:
+!ls -lrt;
+
+-HDFS file access :
+
+ dfs -ls /;
+-------------------------------------------------------------------------
+using the show function option:
+
+show functions;
+select sum(1) from test.store_day_sale;
+-------------------------------------------------------------------------
+Difference between internal and External table:
+
+For External Tables -
+
+External table stores files on the HDFS server but tables are not linked to the source file completely.
+
+If you delete an external table the file still remains on the HDFS server.
+
+As an example if you create an external table called “table_test” in HIVE using HIVE-QL and link the table to file “file”, then deleting “table_test” from HIVE will not delete “file” from HDFS.
+
+External table files are accessible to anyone who has access to HDFS file structure and therefore security needs to be managed at the HDFS file/folder level.
+
+Meta data is maintained on master node, and deleting an external table from HIVE only deletes the metadata not the data/file.
+
+For Internal Tables-
+
+Stored in a directory based on settings in hive.metastore.warehouse.dir, by default internal tables are stored in the following directory “/user/hive/warehouse” you can change it by updating the location in the config file .
+Deleting the table deletes the metadata and data from master-node and HDFS respectively.
+Internal table file security is controlled solely via HIVE. Security needs to be managed within HIVE, probably at the schema level (depends on organization).

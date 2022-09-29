@@ -1,0 +1,11 @@
+1000	MAJOR|MATH	Math,Chemistry,Art
+1001	MAJOR|SCIENCE	Physics,Chemistry,SocSciences
+1002	MAJOR|ART	Calligraphy,Painting,SocSciences
+1003	MAJOR|ACCOUNTING	Commerce,ForeignTrade,Math
+1004	MAJOR|MATH	CompSc,Physics,SocSciences
+1005	MAJOR|SCIENCE	Chemistry,SocSciences,Math
+1006	MAJOR|MATH	Physics,Chemistry,Math
+1007	MAJOR|ART	Painting,Poetry,Music
+1008	MAJOR|SCIENCE	Physics,SocSciences,Music
+1009	MAJOR|ART	Music,Painting,Shakespear
+1010	MAJOR|SCIENCE	CompSc,Physics,Math

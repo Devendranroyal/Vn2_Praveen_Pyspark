@@ -1,0 +1,11 @@
+100,MAA_CHENNAI,Chennai Store 1
+101,BOB_MUMBAI,Mumbai Store 1
+102,KOL_KOLKATA,Kolkata Store 1
+103,NDL_NEW DELHI,New Delhi Store 1
+104,PNE_PUNE,PUne Store 1
+105,AHD_AHEMEDABAD,Ahemedabad Store 1
+106,HYD_HYDERABAD,Hyderabad Store 1
+107,BGR_BENGALURU,Bengaluru Store 1
+108,CHG_CHANDIGARH,Chandigarh Store 1
+109,RPR_RAIPUR,Raipur Store 1
+111,UNK_UNKNOWN,UNKNOWN Store 1
